@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<!-- comentários... -->
+<dados>
+	<viewport>
+		<!-- viewport para uma janela de visualização de 620x460 com margem de  10pixels (area total de 640x480)-->
+		<vpmin x="10" y="10"/>
+		<vpmax x="620" y="460"/>
+	</viewport>
+	
+	<window>
+		<wmin x="0.0" y="0.0"/>
+		<wmax x="10.0" y="10.0"/>
+	</window>
+
+	<ponto x="5" y="5"/>
+	<ponto x="2" y="4"/>
+	<ponto x="4" y="6"/>
+
+
+	<reta>
+		<ponto x="0" y="0"/>
+		<ponto x="10" y="10"/>
+	</reta>
+
+	<reta>
+		<ponto x="-1" y="5"/>
+		<ponto x="11" y="5"/>
+	</reta>
+
+	<poligono>
+		<ponto x="1.0" y="1.0"/>
+		<ponto x="1.0" y="2.0"/>
+		<ponto x="2.0" y="2.0"/>
+		<ponto x="2.0" y="1.0"/>
+		<ponto x="1.5" y="0.0"/>
+		<!-- <ponto> adicionais -->
+	</poligono>
+
+	<poligono>
+		<ponto x="1.0" y="2.0"/>
+		<ponto x="1.5" y="3.0"/>
+		<ponto x="2.0" y="2.0"/>
+	</poligono>
+
+	<reta>
+		<ponto x="1.5" y="3"/>
+		<ponto x="1.5" y="2"/>
+	</reta>
+</dados>
