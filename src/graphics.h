@@ -20,7 +20,6 @@ struct DrawTarget
 {
     ImDrawList* draw_list{};
     ImVec2 cursorPos;
-    uint32_t color{};
     float thickness{};
 };
 
@@ -101,6 +100,14 @@ inline void objectsToViewportCoord(std::vector<std::unique_ptr<Object>>& objects
 }
 
 void ImGuiFileMenu(bool& bWasFileLoaded);
+
+void ImGuiUIForObjControl(int objIdx);
+
+void ImGuiAddObjectPopup(bool bShowPopup);
+
+void ImGuiListAndEditObjects();
+
+void ImGuiUIForwindowControl();
 
 void ImGuiMainWindow();
 
