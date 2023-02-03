@@ -19,8 +19,11 @@ namespace mirras
 struct DrawTarget
 {
     ImDrawList* draw_list{};
-    ImVec2 cursorPos;
+    ImVec2 currentDrawPos;
     float thickness{};
+    bool enableCohenSutherland{};
+    bool enableLiangBarsky{};
+    bool enableWeilerAtherton{};
 };
 
 inline void initGLFW()
@@ -99,11 +102,11 @@ inline void objectsToViewportCoord(std::vector<std::unique_ptr<Object>>& objects
         obj->toViewportCoord(wmin, wmax, vmin, vmax);
 }
 
-void ImGuiFileMenu(bool& bWasFileLoaded);
+void ImGuiFileMenu(bool& wasFileLoaded);
 
 void ImGuiUIForObjControl(int objIdx);
 
-void ImGuiAddObjectPopup(bool bShowPopup);
+void ImGuiAddObjectPopup(const char* str_id);
 
 void ImGuiListAndEditObjects();
 

@@ -10,6 +10,7 @@
 namespace mirras
 {
 struct DrawTarget;
+class Window;
 
 struct Object
 {
@@ -19,8 +20,9 @@ struct Object
     virtual void applyTransform(const glm::mat4& transform) = 0;
     virtual Vec2f getCenter() const = 0;
     virtual const char* getTypeName() const = 0;
+    virtual bool isInside(const Window& win) const = 0;
 
-    bool bIsSelected{};
+    bool isSelected{};
 
     virtual ~Object() = default;
 };
@@ -35,6 +37,7 @@ struct Point : public Object
     virtual void writeViewportCoordToFile(std::ofstream& outputFile) const override;
     virtual void applyTransform(const glm::mat4& transform) override;
     virtual Vec2f getCenter() const override;
+    virtual bool isInside(const Window& win) const override;
 
     virtual const char* getTypeName() const
     {
@@ -58,6 +61,7 @@ struct LineSegment : public Object
     virtual void writeViewportCoordToFile(std::ofstream& outputFile) const override;
     virtual void applyTransform(const glm::mat4& transform) override;
     virtual Vec2f getCenter() const override;
+    virtual bool isInside(const Window& win) const override;
 
     virtual const char* getTypeName() const
     {
@@ -78,6 +82,7 @@ struct Polygon : public Object
     virtual void writeViewportCoordToFile(std::ofstream& outputFile) const override;
     virtual void applyTransform(const glm::mat4& transform) override;
     virtual Vec2f getCenter() const override;
+    virtual bool isInside(const Window& win) const override;
 
     virtual const char* getTypeName() const
     {

@@ -33,4 +33,9 @@ inline bool operator== (Vec2f lhs, Vec2f rhs)
     return (lhs.x == rhs.x && lhs.y == rhs.y);
 }
 
+inline bool operator!= (Vec2f lhs, Vec2f rhs)
+{
+    return !(lhs == rhs);
+}
+
 } // namespace mirras

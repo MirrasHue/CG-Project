@@ -1275,6 +1275,36 @@ bool ImGui::RadioButton(const char* label, int* v, int v_button)
     return pressed;
 }
 
+bool ImGui::ToggleButton(const char* str_id, bool* v)
+{
+    ImVec4* colors = ImGui::GetStyle().Colors;
+	ImVec2 p = ImGui::GetCursorScreenPos();
+	ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+	float height = ImGui::GetFrameHeight();
+	float width = height * 1.55f;
+	float radius = height * 0.50f;
+    bool pressed{};
+
+	ImGui::InvisibleButton(str_id, ImVec2(width, height));
+	if (ImGui::IsItemClicked())
+    {
+        *v = !*v;
+        pressed = true;
+    }
+	ImGuiContext& g = *GImGui;
+
+	if (ImGui::IsItemHovered())
+		draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), ImGui::GetColorU32(*v ? colors[ImGuiCol_ButtonActive] : ImVec4(0.7f, 0.7f, 0.7f, 1.0f)), height * 0.5f);
+	else
+		draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), ImGui::GetColorU32(*v ? colors[ImGuiCol_Button] : ImVec4(0.5f, 0.5f, 0.5f, 1.0f)), height * 0.50f);
+
+	draw_list->AddCircleFilled(ImVec2(p.x + radius + (*v ? 1 : 0) * (width - radius * 2.0f), p.y + radius), radius - 1.5f, IM_COL32(255, 255, 255, 255));
+
+    return pressed;
+}
+
+
 // size_arg (for each axis) < 0.0f: align to end, 0.0f: auto, > 0.0f: specified size
 void ImGui::ProgressBar(float fraction, const ImVec2& size_arg, const char* overlay)
 {

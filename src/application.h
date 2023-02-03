@@ -10,8 +10,8 @@ public:
     App(int windowWidth = 800, int windowHeight = 600, const char* title = "CG-Project")
     {
         initGLFW();
-        glfw::WindowHints{.contextVersionMajor = 4,
-                          .contextVersionMinor = 5,
+        glfw::WindowHints{.contextVersionMajor = 3,
+                          .contextVersionMinor = 3,
                           .openglProfile = glfw::OpenGlProfile::Core
                          }.apply();
 

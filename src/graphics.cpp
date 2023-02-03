@@ -13,13 +13,13 @@ void ImGuiSaveFilePopup(const char* str_id)
     {
         ImGui::Text("Enter the file name");
         static char buf[64];
-        bool bEnterPressed = false;
+        bool wasEnterPressed = false;
 
-        bEnterPressed = ImGui::InputText(".xml", buf, 64, ImGuiInputTextFlags_EnterReturnsTrue);
+        wasEnterPressed = ImGui::InputText(".xml", buf, 64, ImGuiInputTextFlags_EnterReturnsTrue);
 
         ImGui::Spacing();
 
-        if(ImGui::Button("Save") || bEnterPressed)
+        if(ImGui::Button("Save") || wasEnterPressed)
         {
             std::string fileName = buf;
 
@@ -48,11 +48,11 @@ void ImGuiSaveFilePopup(const char* str_id)
     }
 }
 
-void ImGuiFileMenu(bool& bWasFileLoaded)
+void ImGuiFileMenu(bool& wasFileLoaded)
 {
     static ImGui::FileBrowser fileBrowser(ImGuiFileBrowserFlags_NoModal);
 
-    bool bSaveFile = false;
+    bool shouldSaveFile = false;
 
     if(ImGui::BeginMenu("File"))
     {
@@ -62,10 +62,10 @@ void ImGuiFileMenu(bool& bWasFileLoaded)
             fileBrowser.Open();
         }
 
-        if(bWasFileLoaded)
+        if(wasFileLoaded)
         {
             if(ImGui::MenuItem("Save File"))
-                bSaveFile = true;
+                shouldSaveFile = true;
 
             if(ImGui::MenuItem("Output File"))
             {
@@ -95,7 +95,7 @@ void ImGuiFileMenu(bool& bWasFileLoaded)
 
         if(auto data = loadDataFromXMLFile(filePath.c_str()))
         {
-            bWasFileLoaded = true;
+            wasFileLoaded = true;
 
             g_World = std::move(data->world);
             g_Window = data->window;
@@ -105,7 +105,7 @@ void ImGuiFileMenu(bool& bWasFileLoaded)
         fileBrowser.ClearSelected();
     }
 
-    if(bSaveFile)
+    if(shouldSaveFile)
         ImGui::OpenPopup("Save File");
 
     ImGuiSaveFilePopup("Save File");
@@ -304,26 +304,26 @@ void ImGuiListAndEditObjects()
         {
             for(int i = 0; i < (int)g_World.objects.size(); ++i)
             {
-                bool bIsSelected = (selectedIdx == i);
+                bool isSelected = (selectedIdx == i);
 
-                if(ImGui::Selectable((g_World.objects[i]->getTypeName() + std::to_string(i)).c_str(), bIsSelected, ImGuiSelectableFlags_AllowItemOverlap))
+                if(ImGui::Selectable((g_World.objects[i]->getTypeName() + std::to_string(i)).c_str(), isSelected, ImGuiSelectableFlags_AllowItemOverlap))
                 {
-                    if(bIsSelected) // Clicking on the same object twice to deselect
+                    if(isSelected) // Clicking on the same object twice to deselect
                     {
                         selectedIdx = -1;
-                        bIsSelected = false;
+                        isSelected = false;
                     }
                     else
                     {
                         selectedIdx = i;
-                        bIsSelected = true;
+                        isSelected = true;
                     }
                 }
 
-                if(bIsSelected)
-                    g_World.objects[i]->bIsSelected = true;
+                if(isSelected)
+                    g_World.objects[i]->isSelected = true;
                 else
-                    g_World.objects[i]->bIsSelected = false;
+                    g_World.objects[i]->isSelected = false;
 
                 ImGui::SameLine();
 
@@ -418,14 +418,14 @@ void ImGuiUIForwindowControl()
 
 void ImGuiMainWindow()
 {
-    static bool bWasFileLoaded = false;
+    static bool wasFileLoaded = false;
     static float thickness = 1.5f;
     
     uint32_t color{};
 
     if(ImGui::BeginMainMenuBar())
     {
-        ImGuiFileMenu(bWasFileLoaded);      
+        ImGuiFileMenu(wasFileLoaded);      
 
         ImGui::EndMainMenuBar();
     }
@@ -434,10 +434,14 @@ void ImGuiMainWindow()
 
     g_Logger.Draw("Log");
 
-    if(!bWasFileLoaded)
+    if(!wasFileLoaded)
         return;
 
     ImGuiListAndEditObjects();
+
+    static bool enableLiangBarsky{};
+    static bool enableCohenSutherland{};
+    static bool enableWeilerAtherton{};
 
     ImGui::Begin("Panel", nullptr, ImGuiWindowFlags_NoTitleBar);
     {
@@ -475,6 +479,29 @@ void ImGuiMainWindow()
         ImGui::Separator();
 
         ImGuiUIForwindowControl();
+
+        ImGui::Separator();
+
+        ImGui::Text("Line Clipping");
+
+        if(ImGui::ToggleButton("Cohen", &enableCohenSutherland))
+            enableLiangBarsky = false;
+
+        ImGui::SameLine();
+        ImGui::Text("Cohen Sutherland");
+
+        if(ImGui::ToggleButton("Liang", &enableLiangBarsky))
+            enableCohenSutherland = false;
+
+        ImGui::SameLine();
+        ImGui::Text("Liang Barsky");
+
+        ImGui::Text("\nPolygon Clipping");
+
+        ImGui::ToggleButton("Weiler", &enableWeilerAtherton);
+
+        ImGui::SameLine();
+        ImGui::Text("Weiler Atherton");
     }
     ImGui::End();
 
@@ -492,8 +519,11 @@ void ImGuiMainWindow()
         ImVec2 currentDrawPos = ImGui::GetCursorScreenPos();
 
         DrawTarget drawTarget{.draw_list = draw_list,
-                              .cursorPos = currentDrawPos,
-                              .thickness = thickness};
+                              .currentDrawPos = currentDrawPos,
+                              .thickness = thickness,
+                              .enableCohenSutherland = enableCohenSutherland,
+                              .enableLiangBarsky = enableLiangBarsky,
+                              .enableWeilerAtherton = enableWeilerAtherton};
 
         if(ImGui::IsWindowDocked())
         {
