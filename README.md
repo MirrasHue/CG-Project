@@ -19,6 +19,6 @@ Instructions to compile the project:
 
     cmake --build . --config Release
 
-5. Find and run the generated executable, on Windows, it's in the Debug/Release folder
+5. Find and run the generated executable
 
 6. On the first use, you may have to adjust the window layout if imgui.ini is not in your root directory
