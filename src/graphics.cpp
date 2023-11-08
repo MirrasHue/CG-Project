@@ -352,7 +352,7 @@ void ImGuiListAndEditObjects()
     ImGui::End();
 }
 
-void ImGuiUIForwindowControl()
+void ImGuiUIForWindowControl()
 {
     ImGui::Text("Window Controls");
 
@@ -478,7 +478,7 @@ void ImGuiMainWindow()
 
         ImGui::Separator();
 
-        ImGuiUIForwindowControl();
+        ImGuiUIForWindowControl();
 
         ImGui::Separator();
 
