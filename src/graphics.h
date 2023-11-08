@@ -110,7 +110,7 @@ void ImGuiAddObjectPopup(const char* str_id);
 
 void ImGuiListAndEditObjects();
 
-void ImGuiUIForwindowControl();
+void ImGuiUIForWindowControl();
 
 void ImGuiMainWindow();
 
